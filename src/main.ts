@@ -1,10 +1,14 @@
 // src/main.ts
 import { createApp } from 'vue';
+import { createPinia } from 'pinia'; // Importa o Pinia
 import App from './App.vue';
-import vuetify from './plugins/vuetify'; // Importa o Vuetify configurado
-import router from './router'; // Se você escolheu Vue Router
+import vuetify from './plugins/vuetify';
+import router from './router';
 
 const app = createApp(App);
-app.use(vuetify); // Usa o Vuetify
-app.use(router); // Usa o router (se aplicável)
+const pinia = createPinia(); // Cria a instância do Pinia
+
+app.use(pinia); // Usa o Pinia
+app.use(vuetify);
+app.use(router);
 app.mount('#app');
