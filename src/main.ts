@@ -1,10 +1,22 @@
-// src/main.ts
-import { createApp } from 'vue';
-import App from './App.vue';
-import vuetify from './plugins/vuetify'; // Importa o Vuetify configurado
-import router from './router'; // Se você escolheu Vue Router
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import App from "./App.vue";
+import router from "./router";
+import { useAuthStore } from "@/store/auth";
+import vuetify from "@/plugins/vuetify"; // Importando o Vuetify
+import "vuetify/styles";
+import "@mdi/font/css/materialdesignicons.css";
 
 const app = createApp(App);
-app.use(vuetify); // Usa o Vuetify
-app.use(router); // Usa o router (se aplicável)
-app.mount('#app');
+const pinia = createPinia();
+app.use(pinia);
+app.use(router);
+app.use(vuetify); // Aplicando Vuetify
+
+// Recupera a sessão ao iniciar o app
+const authStore = useAuthStore();
+if (authStore.token) {
+  authStore.login(authStore.token);
+}
+
+app.mount("#app");
