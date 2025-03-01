@@ -1,26 +1,20 @@
-// src/router/index.ts
-import { createRouter, createWebHistory } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
-import LoginView from '../views/LoginView.vue';
-import { useAuthStore } from '../stores/auth';
+import { createRouter, createWebHistory } from "vue-router";
+import { useAuthStore } from "@/store/auth";
+import Login from "@/modules/auth/Login.vue";
+import UserDashboard from "@/modules/dashboard/UserDashboard.vue";
+import EmpresaDashboard from "@/modules/dashboard/EmpresaDashboard.vue";
 
 const routes = [
+  { path: "/", component: Login },
   {
-    path: '/',
-    name: 'home',
-    component: HomeView,
-    meta: { requiresAuth: true },
+    path: "/dashboard",
+    component: UserDashboard,
+    meta: { requiresAuth: false, role: "user" }, // depois colocar TRUE
   },
   {
-    path: '/sobre',
-    name: 'sobre',
-    component: () => import('../views/SobreView.vue'),
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginView,
+    path: "/empresa",
+    component: EmpresaDashboard,
+    meta: { requiresAuth: false, role: "empresa" },  // depois colocar TRUE
   },
 ];
 
@@ -29,17 +23,18 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
-  console.log('Rota:', to.path, 'Autenticado:', authStore.authenticated);
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore();
 
-  if (to.meta.requiresAuth && !authStore.authenticated) {
-    next('/login');
-  } else if (to.path === '/login' && authStore.authenticated) {
-    next('/');
-  } else {
-    next();
-  }
-});
+//   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+//     return next("/");
+//   }
+
+//   if (to.meta.role && to.meta.role !== authStore.role) {
+//     return next("/");
+//   }
+
+//   next();
+// });
 
 export default router;
